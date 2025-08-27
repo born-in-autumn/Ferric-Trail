@@ -10,5 +10,9 @@ pub struct Cli {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    Open { name: String }
+    Open { 
+        name: String,
+        #[arg(short = 'a', long = "alias", help = "alias for the file")]
+        alias: Option<String>,
+    },
 }
