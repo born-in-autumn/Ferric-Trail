@@ -16,7 +16,8 @@ pub fn is_target_file(entry: &DirEntry, name: &str) -> bool {
     entry.file_name().to_str().map(|s| s.to_lowercase().contains(&name.to_lowercase())).unwrap_or(false)
 }
 
-pub fn file_open(name: &str) {
+pub fn file_open(name: &str, alias: Option<String>) {
+    println!("Alias: {:?}", alias);
     // 我们需要从常用的盘符开始搜索
     let common_path = [("C:/ProgramData/Microsoft/Windows", 10), ("C:/Users/11873/AppData/", 8), ("E:/", 6), ("D:/", 5)];
 
