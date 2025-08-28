@@ -1,12 +1,17 @@
+use std::path::PathBuf;
 use crate::cli::args::{Cli, Commands};
 use crate::core::file_opener::file_open;
 use crate::core::storage::{ save_alias, is_alias };
+use crate::core::file_list::file_list;
 
 pub fn handle_cli(args: Cli) {
     match args.command {
         Commands::Open { name, alias } => {
             handle_open_command(name, alias);
         },
+        Commands::LS  { path   }=> {
+            handle_ls_command(path);
+        }
     }
 }
 
@@ -23,4 +28,8 @@ fn handle_open_command(search_term: String, alias: Option<String>) {
             println!("Error: {}", e);
         }
     }
+}
+
+fn handle_ls_command(path: Option<PathBuf>) {
+    file_list(path)
 }

@@ -1,4 +1,5 @@
-use clap::{ Parser, Subcommand };
+use std::path::PathBuf;
+use clap::{Parser, Subcommand };
 
 
 #[derive(Parser, Debug)]
@@ -15,4 +16,7 @@ pub enum Commands {
         #[arg(short = 'a', long = "alias", help = "alias for the file")]
         alias: Option<String>,
     },
+    LS  {
+        path: Option<PathBuf>,
+    }
 }
