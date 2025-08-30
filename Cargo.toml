@@ -1,5 +1,5 @@
 [package]
-name = "ferric-trail"
+name = "oo"
 version = "0.1.0"
 edition = "2024"
 
@@ -14,3 +14,4 @@ tabled = "0.20.0"
 strum = { version = "0.27.2", features = ["default"]}
 strum_macros = "0.27.2"
 chrono = "0.4.41"
+whoami = "1.6.1"

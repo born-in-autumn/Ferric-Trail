@@ -1,7 +1,6 @@
 use walkdir::{WalkDir, DirEntry};
 use opener;
 use opener::{OpenError};
-
 pub fn is_hidden(entry: &DirEntry) -> bool {
     entry.file_name().to_str().map(|s| s.starts_with(".")).unwrap_or(false)
 }
@@ -9,8 +8,7 @@ pub fn is_hidden(entry: &DirEntry) -> bool {
 fn is_executable_file(entry: &DirEntry) -> bool {
     let path = entry.path();
     let extension = path.extension().and_then(|ext| ext.to_str()).unwrap_or("").to_lowercase();
-
-    matches!(extension.as_str(), "exe" | "lnk" | "bat" | "cmd" | "msi" | "com" | "ps1" | "vbs")
+    matches!(extension.as_str(), "exe" | "lnk" | "url" )
 
 }
 
@@ -19,7 +17,9 @@ pub fn is_target_file(entry: &DirEntry, name: &str) -> bool {
 }
 pub fn file_open(name: &str) -> Result<(), OpenError> {
     // 我们需要从常用的盘符开始搜索
-    let common_path = [("C:/ProgramData/Microsoft/Windows/Start Menu/Programs", 10), ("C:/Users/11873/AppData/", 8), ("E:/", 6), ("D:/", 5)];
+    let username = whoami::username();
+    let appdata_path = format!("C:/Users/{}/AppData/", username);
+    let common_path = [("C:/ProgramData/Microsoft/Windows/Start Menu/Programs", 10), (appdata_path.as_str(), 8), ("E:/", 6), ("D:/", 5), ("C:/", 4)];
     // let common_path = [(r"C:\ProgramData\Microsoft\Windows\Start Menu\Programs", 10)];
 
     // test();
@@ -28,7 +28,6 @@ pub fn file_open(name: &str) -> Result<(), OpenError> {
             let _: Result<(), OpenError> = match opener::open(result) {
                 Ok(_) => {
                     return Ok(());
-                    // 如果打开成功，则记录下别名
                 },
                 Err(e) => Err(e),
             };
@@ -41,7 +40,6 @@ pub fn file_open(name: &str) -> Result<(), OpenError> {
 pub fn search_files(path: &str, name: &str , priority: u32) -> Option<String> {
     let mut best_score = 0;
     let mut best_result = None;
-    let high_score_threshold = 15000;
     for entry in WalkDir::new(path)
      .into_iter()
      .filter_map(|e| e.ok())

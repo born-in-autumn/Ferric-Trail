@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
 
+
 #[derive(Debug, Serialize, Deserialize)]
 
 pub struct Storage {
@@ -18,7 +19,7 @@ pub struct File {
 pub fn save_alias(name: &String, alias: &String) {
     println!("name, alias, {:?} {:?}", name, alias);
     // 先检查当前是否有配置文件
-    let config_path = Path::new("src/config").join("file_info.json");
+    let config_path = Path::new("E:/projects/ferric-trail/src/config").join("file_info.json");
     // 如果没有，则直接写
     if !config_path.exists() {
         let storage = Storage {
@@ -31,7 +32,7 @@ pub fn save_alias(name: &String, alias: &String) {
         fs::write(&config_path, json).unwrap();
     } else {
         // 如果有，需要反序列化查一下，再更改数据最后再次序列化
-        let data = fs::read_to_string("src/config/file_info.json").unwrap();
+        let data = fs::read_to_string("E:/projects/ferric-trail/src/config/file_info.json").unwrap();
         let mut storage: Storage = serde_json::from_str(&data).unwrap();
         if let Some(file) = storage.files.iter_mut().find(|f| f.name == *name) {
             file.alias.push(alias.to_owned());
@@ -52,11 +53,11 @@ pub fn save_alias(name: &String, alias: &String) {
 }
 
 pub fn is_alias(alias: &String) -> Option<String> {
-    let config_path = Path::new("src/config").join("file_info.json");
+    let config_path = Path::new("E:/projects/ferric-trail/src/config").join("file_info.json");
     if !config_path.exists() {
         None
     } else {
-        let data = fs::read_to_string("src/config/file_info.json").unwrap();
+        let data = fs::read_to_string("E:/projects/ferric-trail/src/config/file_info.json").unwrap();
         let mut storage: Storage = serde_json::from_str(&data).unwrap();
         if let Some(file) = storage.files.iter_mut().find(|f| f.alias.contains(alias)) {
             Some(file.name.clone())
